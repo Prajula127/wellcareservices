@@ -15,6 +15,10 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
+     <context:component-scan base-package="com.wellcareservices" />
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
 
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
@@ -40,11 +44,15 @@
 		<beans:property name="password" value="root" />
 	</beans:bean>
 
-	<!-- Hibernate 4 SessionFactory Bean definition -->
-	<beans:bean id="hibernate4AnnotatedSessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<!-- Hibernate 5 SessionFactory Bean definition -->
+	<beans:bean id="SessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource" />
-		
+		<beans:property name="annotatedClasses">
+		<beans:array>
+		<beans:value>com.wellcareservices.modal.Member</beans:value>
+		</beans:array>
+		</beans:property>
 		<beans:property name="hibernateProperties">
 			<beans:props>
 				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
@@ -54,14 +62,10 @@
 		</beans:property>
 	</beans:bean>
 	
-	
-	<context:component-scan base-package="com.wellcareservices" />
-	
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-	
-	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory" ref="SessionFactory" />
 	</beans:bean>
 
 
 </beans:beans>
+	
